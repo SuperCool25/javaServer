@@ -38,7 +38,7 @@ public class ClientFinder implements Runnable{
 					n.numberOfClients++;
 				}
 				catch(SocketException e) {
-					System.out.println(e.getStackTrace());
+					System.out.println(e.getMessage());
 				}
 
 				

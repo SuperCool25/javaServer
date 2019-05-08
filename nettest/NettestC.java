@@ -46,22 +46,23 @@ public class NettestC implements ActionListener, WindowListener, KeyListener {
 			System.out.println("Got ID" + ClientID);
 			
 			while (running) {
-				byte message = 0b00000000;
+				//              |###|###|###|###|###|###|###|###
+				int message = 0b01000000000000000000000000000000;
 				
 				if (keys[KeyEvent.VK_W]) {
-					message |= 0b10000000;
+					message |= 0b00001000;
 				}
 				if (keys[KeyEvent.VK_A]) {
-					message |= 0b01000000;
+					message |= 0b00000100;
 				}
 				if (keys[KeyEvent.VK_S]) {
-					message |= 0b00100000;
+					message |= 0b00000010;
 				}
 				if (keys[KeyEvent.VK_D]) {
-					message |= 0b00010000;
+					message |= 0b00000001;
 				}
 				
-				if (message != 0b00000000) {
+				if (message != 0b01000000000000000000000000000000) {
 					ss.getOutputStream().write(message);
 					ss.getOutputStream().flush();
 				}

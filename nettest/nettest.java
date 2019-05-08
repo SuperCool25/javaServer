@@ -25,6 +25,7 @@ public class nettest implements ActionListener{
 	int maxClients = 4;
 	
 	int[]x;
+	int[]y;
 	
 	ServerSocket ss;
 	Socket[] clients;
@@ -34,6 +35,7 @@ public class nettest implements ActionListener{
 	public nettest() {
 		numberOfClients = 0;
 		x = new int[4];
+		y = new int[4];
 		JFrame window = new JFrame("Server");
 		
 		window.setLayout(null);
@@ -76,13 +78,13 @@ public class nettest implements ActionListener{
 				g.fillRect(0, 0, 500, 500);
 				for( int i = 0; i < numberOfClients; i ++) {
 					g.setColor(Color.RED);
-					g.fillRect(x[i], i * 50, 50, 50);
+					g.fillRect(x[i], y[i], 50, 50);
 				}
 				
 				try {
 					Thread.sleep(1000/20);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					// TODO Auto-generated catch block 
 					e.printStackTrace();
 				}
 				for(int i = 0; i < incomingMessages.length; i++) {
@@ -91,22 +93,29 @@ public class nettest implements ActionListener{
 						
 						if(incomingMessages[i].ready()) {
 							
-							byte info = (byte) incomingMessages[i].read();
+							int info = incomingMessages[i].read();
+							//System.out.println("info" + Integer.toBinaryString(info));
 							
-							if (info == 0b11111111) {
+							if (info == 0b11111111111111111111111111111111) {
 								System.out.println("Client" + i + " is gone");
 								x[i] = -5;
 								clients[i].close();
 							}
 							
-							if ((info & (1 << 7)) != 0) {
-								x[i] += 2;
+							if ((info & (1 << 3)) != 0) {
+								y[i] = y[i] - 2;
 							}
-							if ((info & (1 << 6)) != 0) {
+							if ((info & (1 << 2)) != 0) {
 								x[i] -= 2;
 							}
-
-							
+							if ((info & (1 << 1)) != 0) {
+								
+								y[i] += 2;
+							}
+							if ((info & (1 << 0)) != 0) {
+								
+								x[i] += 2;
+							}
 						}
 					} 
 				}
